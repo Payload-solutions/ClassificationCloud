@@ -2,7 +2,7 @@ FROM python:3.9.6
 
 RUN pip install --upgrade pip
 
-WORKDIR /neuronnetwork
+WORKDIR /classification_network
 
 ENV FLASK_APP manage.py
 
