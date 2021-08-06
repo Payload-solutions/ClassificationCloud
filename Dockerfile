@@ -16,4 +16,6 @@ EXPOSE 4000
 
 COPY . .
 
-CMD ["flask", "run"]
+ENTRYPOINT [ "python" ]
+
+CMD ["manage.py"]
