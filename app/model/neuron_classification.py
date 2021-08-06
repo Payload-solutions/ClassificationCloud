@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import (
     to_categorical
 )
+from sklearn.preprocessing import LabelEncoder
 
 
 class NeuronClassification:
@@ -27,8 +28,19 @@ class NeuronClassification:
         self.input_shape_val = input_shape_val
         self.output_shape_val = output_shape_val
 
+
+        """
+        The values are transformed from plain text to numeric categorical
+        using this function:
+            y_train = LabelEncoder().fit_trasnform(y_train)
+            y_test = LabelEncoder().fit_trasnform(y_test)
+
+            train_labels, test_labels = to_categorical(y_train), to_categorical(y_test)
+            # now the data is ready to be transformed, because the data is floating
+        """
+
     def _defining_data_split(self):
-        X, y = self.data_master.drop("", axis=1), self.data_master[""]
+        X, y = self.data_master.drop(["quality_product", "quality_product_"], axis=1), self.data_master["quality_product_"]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
         train_data, test_data = X_train.to_numpy(), X_test.to_numpy()
         train_labels, test_labels = to_categorical(y_train), to_categorical(y_test)
