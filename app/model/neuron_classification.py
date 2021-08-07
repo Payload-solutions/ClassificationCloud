@@ -1,5 +1,6 @@
+import json
+from typing import Any
 import pandas as pd
-from tensorflow import keras
 from tensorflow.keras import (
     models,
     layers
@@ -9,8 +10,8 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import (
     to_categorical
 )
-from sklearn.preprocessing import LabelEncoder
 import os
+
 
 class NeuronClassification:
 
@@ -32,27 +33,26 @@ class NeuronClassification:
         """
         The values are transformed from plain text to numeric categorical
         using this function:
-            y_train = LabelEncoder().fit_trasnform(y_train)
-            y_test = LabelEncoder().fit_trasnform(y_test)
+            y_train = LabelEncoder().fit_transform(y_train)
+            y_test = LabelEncoder().fit_transform(y_test)
 
             train_labels, test_labels = to_categorical(y_train), to_categorical(y_test)
             # now the data is ready to be transformed, because the data is floating
         """
 
-
         if not os.path.exists("model_training/classification_model.json"):
             self._defining_model()
 
     def _defining_data_split(self):
-        X, y = self.data_master.drop(["quality_product", "quality_product_"], axis=1), self.data_master["quality_product_"]
+        X, y = self.data_master.drop(["quality_product", "quality_product_"], axis=1), self.data_master[
+            "quality_product_"]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
         train_data, test_data = X_train.to_numpy(), X_test.to_numpy()
         train_labels, test_labels = to_categorical(y_train), to_categorical(y_test)
 
         return train_data, test_data, train_labels, test_labels
 
-    def _defining_model(self):
-        # train_data, test_data, train_labels, test_labels = self._defining_data_split()
+    def _defining_model(self) -> None:
 
         x_val = self.train_data[:int(len(self.train_data) * 0.32)]
         partial_x_train = self.train_data[int(len(self.train_data) * 0.32):]
@@ -72,24 +72,41 @@ class NeuronClassification:
                             batch_size=512, verbose=False,
                             validation_data=(x_val, y_val))
         json_model = model.to_json()
+        print(history.history)
+
+        # saving the classification model
         with open("model_training/classification_model.json", "w") as json_file:
             json_file.write(json_model)
-        
+
         # serializing the data
         model.save_weights("model_training/classification_weights.h5")
 
-        return {
-            "history": history,
-            "test_data": test_data,
-            "test_labels": test_labels,
-            "model": model,
-        }
+        # saving the history variable
+        with open("model_training/classification_history.json", "w") as history_file:
+            json.dump(history.history, history_file)
 
-    def get_metrics(self) -> float:
-        metrics_vals = self._defining_model()
-        data_test = metrics_vals["test_data"]
-        label_test = metrics_vals["test_labels"]
-        model = metrics_vals["model"]
+    def measure_predictions(self) -> Any:
 
-        accuracy_metric = float("{0:.2f}%".format(model.evaluate(data_test, label_test)[1] * 100))
-        return accuracy_metric
+        try:
+            with open("model_training/classification_model.json") as json_file:
+                loaded_model = json_file.read()
+
+            model_loaded = model_from_json(loaded_model)
+
+            # Loading weights
+            model_loaded.load_weights("model_training/classification_weights.h5")
+
+            # making another evaluation
+            model_loaded.compile(optimizer="rmsprop",
+                                 loss="categorical_crossentropy",
+                                 metrics=["accuracy"])
+            accuracy_metric = float("{0:.2f}".format(model_loaded.evaluate(self.test_data, self.test_labels)[1] * 100))
+            return {
+                "accuracy_metrics": accuracy_metric,
+                "test_data": self.test_data,
+                "test_labels": self.test_labels
+            }
+        except ValueError as e:
+            return {
+                "message": "Error by: {}".format(str(e))
+            }
