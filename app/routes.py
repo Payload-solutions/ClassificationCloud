@@ -1,6 +1,7 @@
 from app import app
 from flask import (
-    jsonify
+    jsonify,
+    request
 )
 import unittest
 
@@ -13,6 +14,8 @@ def tst():
 
 @app.route("/classification", methods=["GET", "POST"])
 def classification():
-    return jsonify({
-        "message": "the url is working now"
-    })
+    if request.method == "POST":
+        features_data = request.json["features_data"]
+        target_data = request.json["target_data"]
+    else:
+        pass

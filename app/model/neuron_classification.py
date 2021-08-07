@@ -1,5 +1,6 @@
 import json
 from typing import Any
+from numpy.core.fromnumeric import shape
 import pandas as pd
 from tensorflow.keras import (
     models,
@@ -11,6 +12,7 @@ from tensorflow.keras.utils import (
     to_categorical
 )
 import os
+import numpy as np
 
 
 class NeuronClassification:
@@ -85,27 +87,34 @@ class NeuronClassification:
         with open("model_training/classification_history.json", "w") as history_file:
             json.dump(history.history, history_file)
 
-    def measure_predictions(self) -> Any:
+    def measure_predictions(self, features_value: np.ndarray, target_value: np.ndarray) -> Any:
 
         try:
-            with open("model_training/classification_model.json") as json_file:
-                loaded_model = json_file.read()
 
-            model_loaded = model_from_json(loaded_model)
+            if features_value.shape == (len(features_value), 9) or features_value.shape == (1, 9):
 
-            # Loading weights
-            model_loaded.load_weights("model_training/classification_weights.h5")
+                with open("model_training/classification_model.json") as json_file:
+                    loaded_model = json_file.read()
 
-            # making another evaluation
-            model_loaded.compile(optimizer="rmsprop",
-                                 loss="categorical_crossentropy",
-                                 metrics=["accuracy"])
-            accuracy_metric = float("{0:.2f}".format(model_loaded.evaluate(self.test_data, self.test_labels)[1] * 100))
-            return {
-                "accuracy_metrics": accuracy_metric,
-                "test_data": self.test_data,
-                "test_labels": self.test_labels
-            }
+                model_loaded = model_from_json(loaded_model)
+
+                # Loading weights
+                model_loaded.load_weights("model_training/classification_weights.h5")
+
+                # making another evaluation
+                model_loaded.compile(optimizer="rmsprop",
+                                    loss="categorical_crossentropy",
+                                    metrics=["accuracy"])
+
+                # accuracy prediction
+                accuracy_metric = float("{0:.2f}".format(model_loaded.evaluate(np.array(features_value), np.array(target_value))[1] * 100))
+
+                return {
+                    "accuracy_metrics": accuracy_metric,
+                }
+
+            else:
+                raise ValueError("The dimension in the features is not the right")
         except ValueError as e:
             return {
                 "message": "Error by: {}".format(str(e))
