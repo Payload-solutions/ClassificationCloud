@@ -12,10 +12,13 @@ def tst():
     unittest.TextTestRunner().run(tests)
 
 
-@app.route("/classification", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def classification():
-    if request.method == "POST":
-        features_data = request.json["features_data"]
-        target_data = request.json["target_data"]
+
+    if request.method == "GET":
+        return jsonify({
+            "message": "testing"
+        })
     else:
         pass
+

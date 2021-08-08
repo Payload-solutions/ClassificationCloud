@@ -9,7 +9,6 @@ pandas = "*"
 numpy = "*"
 scikit-learn = "*"
 flask-cors = "*"
-tensorflow = "*"
 flask-testing = "*"
 
 [dev-packages]
