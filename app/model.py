@@ -1,5 +1,4 @@
 
-from operator import index
 from app import db
 import pandas as pd
 
@@ -21,9 +20,14 @@ class YogurtData(db.Model):
 
 db.create_all()
 
+# if not db.Query("yogurt_features_data").first():
+#     dataframe = pd.read_csv("app/classification_data.csv")
+#     print(dataframe)
+#     dataframe.to_sql(name = "yogurt_features_data", con=db.engine, index=False)
 
-def model_exists() -> bool:
-    if not db.Query("yogurt_features").first():
-        dataframe = pd.read_csv("classification_data.csv")
-        dataframe.to_sql(name = "yogurt_features", con=db.engine, index=False)
-model_exists()
+
+# def model_exists() -> bool:
+#     if not db.Query("yogurt_features").first():
+#         dataframe = pd.read_csv("classification_data.csv")
+#         dataframe.to_sql(name = "yogurt_features", con=db.engine, index=False)
+# model_exists()
