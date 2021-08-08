@@ -10,6 +10,9 @@ numpy = "*"
 scikit-learn = "*"
 flask-cors = "*"
 flask-testing = "*"
+flask-sqlalchemy = "*"
+pymysql = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
