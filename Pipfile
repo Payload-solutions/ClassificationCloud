@@ -13,6 +13,8 @@ flask-testing = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
 sqlalchemy = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
 
