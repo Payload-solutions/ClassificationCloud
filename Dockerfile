@@ -4,7 +4,7 @@ RUN pip install --upgrade pip
 
 WORKDIR /classification_network
 
-ENV FLASK_APP manage.py
+ENV FLASK_APP main.py
 
 ENV FLASK_RUN_HOST 0.0.0.0
 
@@ -16,6 +16,4 @@ EXPOSE 4000
 
 COPY . .
 
-ENTRYPOINT [ "python" ]
-
-CMD ["manage.py"]
+CMD ["flask", "run"]
