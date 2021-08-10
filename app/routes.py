@@ -58,7 +58,7 @@ def bacteria():
 	elements = [{"id": index+1, "bacteria": value, "time": time_} for index, (value, time_) in enumerate(zip(data["growth_log"].to_list(), data["time"].to_list()))]
 	return jsonify({
 		"content": len(elements),
-		"values": elements	
+		"datas": elements	
 	})
 
 
