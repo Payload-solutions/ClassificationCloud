@@ -53,10 +53,11 @@ def get_one_feature(index):
 @app.route("/bacteria")
 def bacteria():
 	"""presenting growth bacteria in 24 hours """
-	dataset = pd.read_csv("data/growth_curve.csv")
-	elements = [{"bacteria": value, "time": data} for value, data in zip(dataset.growth_log.to_list(), dataset.time.to_list())]
-	
+	data = pd.read_csv("data/growth_curve.csv")
+	# elements = [{"bacteria": value, "time": data} for value, data in zip(dataset.growth_log.to_list(), dataset.time.to_list())]
+	elements = [{"id": index+1, "bacteria": value, "time": time_} for index, (value, time_) in enumerate(zip(data["growth_log"].to_list(), data["time"].to_list()))]
 	return jsonify({
+		"content": len(elements),
 		"values": elements	
 	})
 
