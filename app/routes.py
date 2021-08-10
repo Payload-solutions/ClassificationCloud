@@ -1,5 +1,5 @@
 from app import app
-
+import pandas as pd
 from flask import (
     jsonify,
     request
@@ -48,3 +48,22 @@ def index():
 def get_one_feature(index):
     data = YogurtData.query.get(index)
     return yogurt_schema.jsonify(data)
+
+
+@app.route("/bacteria")
+def bacteria():
+	"""presenting growth bacteria in 24 hours """
+	dataset = pd.read_csv("data/growth_curve.csv")
+	elements = [{"bacteria": value, "time": data} for value, data in zip(dataset.growth_log.to_list(), dataset.time.to_list())]
+	
+	return jsonify({
+		"values": elements	
+	})
+
+
+
+
+
+
+
+
