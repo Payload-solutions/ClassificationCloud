@@ -5,7 +5,7 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - 8001:4000
+            - 4000:4000
         volumes:
             - .:/db_services
         depends_on:
