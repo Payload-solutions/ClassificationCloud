@@ -40,7 +40,7 @@ def index():
     if request.method == "GET":
         data = YogurtData.query.all()
         elements = yogurt_schemas.dump(data)
-        
+
         return jsonify(elements)
 
 
