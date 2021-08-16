@@ -2,7 +2,7 @@ FROM python:3.9.6
 
 RUN pip install --upgrade pip
 
-WORKDIR /db_service
+WORKDIR /code
 
 ENV FLASK_APP main.py
 
