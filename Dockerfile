@@ -4,16 +4,12 @@ RUN pip install --upgrade pip
 
 WORKDIR /code
 
-ENV FLASK_APP main.py
-
-ENV FLASK_RUN_HOST 0.0.0.0
-
-COPY requirements.txt requirements.txt
+COPY requirements.txt /code/requirements.txt
 
 RUN pip install -r requirements.txt
 
+COPY . /code
+
 EXPOSE 4000
 
-COPY . .
-
-CMD ["flask", "run"]
+CMD ["python", "manage.py", "runserver"]

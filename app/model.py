@@ -46,7 +46,5 @@ class YogurtData(db.Model):
         self.quality_product_  = quality_product_
          
 
-db.create_all()
-dataframe = pd.read_csv("app/classification_data.csv")
-dataframe.to_sql(name = "features_data", if_exists="replace", con=db.engine, index=True)
+
 

@@ -1,32 +1,54 @@
-version: "3.0"
-volumes: 
-    dbdata:
-        driver: local
+version: "3.5"
+
+volumes:
+  flask-db:
+
+
+networks:
+  fluxit:
+   name: fluxit
+
+
 services:
+  db:
+    container_name: db
+    image: mysql:latest
+    restart: always
+    hostname: database
+    networks:
+      - fluxit
+    environment:
+      MYSQL_DATABASE: YogurtQuality
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3307:3306"
+    expose:
+      - "3306"
+    volumes:
+      - flask-db:/var/lib/mysql
 
-    db:
-        image: mysql
-        command: '--default-authentication-plugin=mysql_native_password'
-        restart: always
-        environment:
-            MYSQL_DATABASE: YogurtQuality
-            MYSQL_USER: payload
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_PASSWORD: payload123
-        volumes:
-            - .dbdata:/var/lib/mysql
-        ports:
-            - 3306:3306
+  server:
+    container_name: db_classification
+    build: .
+    hostname: db_classification
+    networks:
+      - fluxit
+    ports:
+      - "4000:4000"
+    volumes: [".:/code"]
+    restart: always
+    depends_on:
+      - db
+    environment:
+      ENV: DEVELOPMENT
+      DB_USERNAME: username
+      DB_PASSWORD: password
+      DB_DATABASE: YogurtQuality
+      DB_HOST: database
+      DB_PORT: 3306
 
-    backend:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        ports:
-            - 4000:4000
-        volumes: 
-            - .:/code
-        depends_on:
-            - db
+    
 
     
