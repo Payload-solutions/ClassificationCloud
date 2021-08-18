@@ -16,7 +16,7 @@ def get_environment_config():
 
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://payload:payload123@db:3306/YogurtQuality'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root_payload:@localhost/YogurtQuality'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(get_environment_config())
 db = SQLAlchemy(app)

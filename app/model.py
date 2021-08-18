@@ -19,7 +19,7 @@ class YogurtData(db.Model):
     quality_product_ = db.Column(db.Integer, index=True, nullable=False)
 
 
-    def __init__(self, index: int,
+    def __init__(self,
                 streptococcus_initial_strain_cfu_ml: float,
                 lactobacillus_initial_strain_cfu_ml: float,
                 ideal_temperature_c: float,
@@ -31,8 +31,7 @@ class YogurtData(db.Model):
                 lactobacillus_final_cfu_ml: float,
                 streptococcus_final_cfu_ml: float,
                 quality_product_) -> None:
-
-        self.index  =       index
+                
         self.streptococcus_initial_strain_cfu_ml  = streptococcus_initial_strain_cfu_ml
         self.lactobacillus_initial_strain_cfu_ml  = lactobacillus_initial_strain_cfu_ml
         self.ideal_temperature_c  = ideal_temperature_c
