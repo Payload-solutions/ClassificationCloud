@@ -1,7 +1,7 @@
 from flask import Flask, config
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_marshmallow import Marshmallow
 # from config import Config
 import pandas as pd
 
